@@ -9,10 +9,14 @@ import (
 	"github.com/stellar/go/keypair"
 )
 
-func signAndSubmitTransaction() {
-	sourceAddress := "xxx" //secret key
-	destinationAddress := "GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS"
-	kp, _ := keypair.Parse(sourceAddress)
+/*
+sign and submit a transaction to the stellar network
+
+src: secret key of sender
+dest: public address of receiver
+*/
+func signAndSubmitTransaction(src, dest) {
+	kp, _ := keypair.Parse(src)
 	client := horizonclient.DefaultPublicNetClient
 
 	// load account information
@@ -23,7 +27,7 @@ func signAndSubmitTransaction() {
 	}
 	
 	op := txnbuild.Payment{
-		Destination: destinationAddress,
+		Destination: dest,
 		Amount: "1",
 		Asset: txnbuild.NativeAsset{},
 	}
@@ -50,6 +54,14 @@ func signAndSubmitTransaction() {
 	log.Println("Transaction response::", resp)
 }
 
+/*
+generate a transaction uri given arguments
+
+dest: public address of receiver
+amount: amount of asset
+assetName: ISO format: XLM, USD, etc
+memo: a string to store in memo
+*/
 func generateTransactionURI(dest, amount, assetName, memo string) (string, error) {
 	/*
 	Using SEP 7 Protocol

@@ -2,44 +2,79 @@ package main
 
 import (
 	"log"
+	"errors"
 	"github.com/stellar/go/txnbuild"
 	"github.com/stellar/go/network"
-	"github.com/stellar/go/horizonclient"
+	"github.com/stellar/go/clients/horizonclient"
 	"github.com/stellar/go/keypair"
 )
 
-func main() {
-	sourceAddress := "GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS"
+func signAndSubmitTransaction() {
+	sourceAddress := "xxx" //secret key
 	destinationAddress := "GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS"
 	kp, _ := keypair.Parse(sourceAddress)
-	client = horizonclient.DefaultPublicNetClient
+	client := horizonclient.DefaultPublicNetClient
 
 	// load account information
-	accountRequest = horizonclient.AccountRequest{AccountID: kp.Address()}
-	sourceAccount, err := client.AccountDetail()
+	accountRequest := horizonclient.AccountRequest{AccountID: kp.Address()}
+	sourceAccount, err := client.AccountDetail(accountRequest)
 	if err != nil {
 		log.Fatal(err)
 	}
 	
-	op := Payment{
+	op := txnbuild.Payment{
 		Destination: destinationAddress,
 		Amount: "1",
-		Asset: NativeAsset{}
+		Asset: txnbuild.NativeAsset{},
 	}
 
-	tx := Transaction{
+	tx := txnbuild.Transaction{
 		SourceAccount: &sourceAccount,
-		Operations: []Operation{&op},
+		Operations: []txnbuild.Operation{&op},
 		Timebounds: txnbuild.NewTimeout(300),
-		Network: network.PublicNetworkPassphrase
+		Network: network.PublicNetworkPassphrase,
 	}
 
 	txe, err := tx.BuildSignEncode(kp.(*keypair.Full))
+	if err != nil {
+		log.Fatal("Error signing transaction::", err)
+	}
 	log.Println("Transaction base64::" + txe)
 
 	resp, err := client.SubmitTransactionXDR(txe)
 	if err != nil {
-		hError := err.(*horizontalclient.Error)
+		hError := err.(*horizonclient.Error)
 		log.Fatal("Error submitting transaction::", hError)
 	}
+
+	log.Println("Transaction response::", resp)
+}
+
+func generateTransactionURI(dest, amount, assetName, memo string) (string, error) {
+	/*
+	Using SEP 7 Protocol
+	Example format for native currency: web+stellar:pay?destination=GCALNQQBXAPZ2WIRSDDBMSTAKCUH5SG6U76YBFLQLIXJTF7FE5AX7AOO&amount=120.1234567&memo=skdjfasf&msg=pay%20me%20with%20lumens
+	Example format for specific asset: web+stellar:pay?destination=GCALNQQBXAPZ2WIRSDDBMSTAKCUH5SG6U76YBFLQLIXJTF7FE5AX7AOO&amount=120.123&asset_code=USD&asset_issuer=GCRCUE2C5TBNIPYHMEP7NK5RWTT2WBSZ75CMARH7GDOHDDCQH3XANFOB&memo=hasysda987fs&callback=url%3Ahttps%3A%2F%2FsomeSigningService.com%2Fhasysda987fs%3Fasset%3DUSD
+	*/
+	var generatedUri = "web+stellar:pay?destination=" + dest + "&amount=" + amount
+	switch assetName {
+		case "XLM":
+			generatedUri += "&memo=" + memo
+		case "USD":
+			assetCode := "USD"
+			assetIssuer := "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX"
+			generatedUri += "&asset_code" + assetCode + "&asset_issuer=" + assetIssuer + "&memo=" + memo
+		default:
+			return "", errors.New("Unsupported asset name::" + assetName)
+	}
+
+	return generatedUri, nil
+}
+
+func main() {
+	uri, err := generateTransactionURI("GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS", "1", "XLM", "")
+	if err != nil {
+		log.Fatal("Failed to generate transaction URI::", err)
+	}
+	log.Println("Generated URI::" + uri)
 }

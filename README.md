@@ -1,2 +1,2 @@
-# stellar-bounty
-Stellar Bounties!
+# stellar-hunter
+Stellar Bounties! Let the hunt begin

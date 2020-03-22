@@ -2,7 +2,7 @@
 
 Run the server using:
 ```shell
-go run cmd/main.go --client-id <GitHub OAuth Client ID> --client-secret <GitHub OAuth Client Secret>
+go run cmd/main.go --client-id <GitHub OAuth Client ID> --client-secret <GitHub OAuth Client Secret> --session-secret <Session Secret>
 ```
 
 ### GitHub OAuth Credentials for testing

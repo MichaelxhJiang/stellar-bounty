@@ -8,6 +8,7 @@ import (
 	"github.com/MichaelxhJiang/stellar-bounty/server/internal/database"
 	"github.com/google/go-github/github"
 	"github.com/google/uuid"
+	"github.com/gorilla/sessions"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 )
@@ -19,17 +20,25 @@ type Server struct {
 	db          *database.DB
 	oauthConfig *oauth2.Config
 	oauthState  map[uuid.UUID]string
+
+	sessionStore sessions.Store
 }
 
-func NewServer(log *zap.SugaredLogger, db *database.DB, oauthConfig *oauth2.Config) *Server {
+func NewServer(
+	log *zap.SugaredLogger,
+	db *database.DB,
+	oauthConfig *oauth2.Config,
+	sessionSecret []byte,
+) *Server {
 	srv := &Server{
 		Server: &http.Server{
 			Addr: ":8080",
 		},
-		log:         log,
-		db:          db,
-		oauthConfig: oauthConfig,
-		oauthState:  make(map[uuid.UUID]string),
+		log:          log,
+		db:           db,
+		oauthConfig:  oauthConfig,
+		oauthState:   make(map[uuid.UUID]string),
+		sessionStore: sessions.NewCookieStore(sessionSecret),
 	}
 
 	http.HandleFunc("/auth/github", srv.handleGithubAuth)
@@ -111,11 +120,23 @@ func (s *Server) handleGithubAuthCallback(w http.ResponseWriter, r *http.Request
 	client := github.NewClient(oauthClient)
 	// empty user string gets the current user
 	// https://github.com/google/go-github/issues/473
-	_, _, err = client.Users.Get(ctx, "")
+	user, _, err := client.Users.Get(ctx, "")
 	if err != nil {
 		err = fmt.Errorf("error getting github user: %s", err)
 		return
 	}
+	userID := user.GetID()
+	if userID == 0 {
+		err = fmt.Errorf("userid cannot be 0: %v", user)
+		return
+	}
+
+	session, err := s.sessionStore.Get(r, "auth")
+	if err != nil {
+		return
+	}
+	session.Values["id"] = userID
+	session.Save(r, w)
 
 	http.Redirect(w, r, redirect, http.StatusFound)
 }

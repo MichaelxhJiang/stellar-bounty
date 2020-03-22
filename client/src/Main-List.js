@@ -18,6 +18,16 @@ class MainList extends Component {
         this.getOpenIssues();
     }
 
+    getBounty = (url) => {
+        /*
+        TODO - call endpoint to retrieve the bounty
+        */
+        return {
+            "amount": "100",
+            "asset": "XLM"
+        }
+    }
+
     getOpenIssues = () => {
         // axios.get(endpoint + "/issues").then(res => {
         //     console.log("Get issues response::" + res);
@@ -63,7 +73,7 @@ class MainList extends Component {
             },
             {
                 _id: "1",
-                title: "Issue with completing transactions - Bounty Available",
+                title: "Issue with completing transactions",
                 bounty: true,
                 open: false,
                 githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
@@ -79,6 +89,7 @@ class MainList extends Component {
 
         this.setState({
             issues: data.map(item => {
+                let { amount, asset } = this.getBounty(item.githubUrl)
                 return (
                     <Card key={item._id} color={item.bounty && !item.open ? "red" : item.bounty && item.open ? "green" : null} fluid>
                         <Card.Content>
@@ -94,7 +105,7 @@ class MainList extends Component {
                                                 color="black"
                                             />
                                         </Menu.Item>
-                                        <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black"}}>
+                                        <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black" }}>
                                             {item.title}
                                         </Link>
                                     </div>
@@ -114,7 +125,20 @@ class MainList extends Component {
                                     </div>
                                 </Card.Header>
                             }
-
+                            {item.bounty ?
+                                <Card.Description>
+                                    Bounty: {amount} {asset}
+                                </Card.Description> : null
+                            }
+                            {item.bounty && !item.open ?
+                                <Card.Description style={{padding: "5px 0px 0px 0px"}}>
+                                    <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black" }}>
+                                        <Header as="h4">
+                                            This issue is closed. Click to select a solution to reward.
+                                        </Header>
+                                    </Link>
+                                </Card.Description> : null
+                            }
                             {item.bounty && item.open ?
                                 <Card.Meta textAlign="right">
                                     <Icon
@@ -123,11 +147,6 @@ class MainList extends Component {
                                     />
                                     <span style={{ paddingRight: 10 }}>Open Bounty</span>
                                 </Card.Meta> : null
-                            }
-                            {item.bounty && !item.open ?
-                                <Card.Description>
-                                    This issue is closed. Please select a solution to reward.
-                                </Card.Description> : null
                             }
                             {item.bounty && !item.open ?
                                 <Card.Meta textAlign="right">
@@ -159,7 +178,7 @@ class MainList extends Component {
             <div style={{ padding: '40px' }}>
                 <div className="row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0px 0px 40px 0px' }}>
                     <Header className="header" as="h2">
-                        Open Issues
+                        My Issues
                     </Header>
                 </div>
                 <div className="row">

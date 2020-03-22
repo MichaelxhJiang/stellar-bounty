@@ -16,10 +16,10 @@ function App() {
       <Router>
         <Menu>
           <Menu.Item>
-            <Link to="/" style={{ color: "black"}}>Open Issues</Link>
+            <Link to="/" style={{ color: "black"}}>My Issues</Link>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/solutions" style={{ color: "black"}}>Solutions</Link>
+            <Link to="/solutions" style={{ color: "black"}}> My Solutions</Link>
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item>

@@ -83,6 +83,46 @@ class RewardSolutionForm extends Component {
         })
     }
 
+    getBounty = (url) => {
+        /*
+        TODO - call endpoint to retrieve the bounty
+        */
+        this.setState({
+            "amount": "100",
+            "asset": "XLM"
+        })
+    }
+
+    setSolution = (e, { value }) => {
+        this.setState({
+            "solution": value
+        })
+    }
+
+    onSubmit = () => {
+        let { solution, githubUrl } = this.state;
+
+        console.log("Solution Url::" + solution)
+        console.log("Issue Url::" + githubUrl)
+
+        if (solution && githubUrl) {
+            console.log("Creating a bounty")
+            axios.post(
+                endpoint + "bounty/create",
+                {
+                    "issueUrl": githubUrl,
+                    "pullRequestUrl": solution
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).then(res => {
+                    console.log(res)
+                })
+        }
+    };
+
     renderSolutions = () => {
         if (this.state.solutions) {
             return this.state.solutions.map(item => {
@@ -137,43 +177,6 @@ class RewardSolutionForm extends Component {
         }
     }
 
-    getBounty = (url) => {
-        this.setState({
-            "amount": "100",
-            "asset": "XLM"
-        })
-    }
-
-    setSolution = (e, { value }) => {
-        this.setState({
-            "solution": value
-        })
-    }
-
-    onSubmit = () => {
-        let { solution, githubUrl } = this.state;
-
-        console.log("Solution Url::" + solution)
-        console.log("Issue Url::" + githubUrl)
-
-        if (solution && githubUrl) {
-            console.log("Creating a bounty")
-            axios.post(
-                endpoint + "bounty/create",
-                {
-                    "issueUrl": githubUrl,
-                    "pullRequestUrl": solution
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).then(res => {
-                    console.log(res)
-                })
-        }
-    };
-
     render() {
         /*
         Fields:
@@ -184,7 +187,7 @@ class RewardSolutionForm extends Component {
             <div style={{ padding: '40px' }}>
                 <div className="row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0px 0px 20px 0px' }}>
                     <Header className="header" as="h2">
-                        Select Solution
+                        Select Solution to Reward
                     </Header>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 0px 20px 0px' }}>

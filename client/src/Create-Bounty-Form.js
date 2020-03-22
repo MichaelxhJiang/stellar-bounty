@@ -6,8 +6,8 @@ import { withRouter } from "react-router-dom"
 let endpoint = "http://localhost:8080";
 
 const assetOptions = [
-    {key: 'XLM', text: 'XLM', value: 'XLM'},
-    {key: 'USD', text: 'USD', value: 'USD'}
+    { key: 'XLM', text: 'XLM', value: 'XLM' },
+    { key: 'USD', text: 'USD', value: 'USD' }
 ]
 
 class CreateBountyForm extends Component {
@@ -50,11 +50,11 @@ class CreateBountyForm extends Component {
         if (amount && asset) {
             console.log("Creating a bounty")
             axios.post(
-                endpoint + "bounty/create", 
+                endpoint + "bounty/create",
                 {
-                    "amount": amount, 
+                    "amount": amount,
                     "asset": asset
-                }, 
+                },
                 {
                     headers: {
                         "Content-Type": "application/json"
@@ -80,21 +80,21 @@ class CreateBountyForm extends Component {
          - Asset
         */
         return (
-            <div style={{padding: '40px'}}>
-                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'0px 0px 20px 0px'}}>
+            <div style={{ padding: '40px' }}>
+                <div className="row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0px 0px 20px 0px' }}>
                     <Header className="header" as="h2">
                         Create a Bounty
                     </Header>
                 </div>
-                <div style={{display: 'flex', justifyContent:'center', alignItems:'center', padding: '0px 0px 20px 0px'}}>
-                    <a href={this.state.githubUrl} target="_blank" style={{color: "grey"}}>
-                    <Icon
-                        size="big"
-                        name="github"
-                    />
-                    View Issue
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 0px 20px 0px' }}>
+                    <a href={this.state.githubUrl} target="_blank" style={{ color: "grey" }}>
+                        <Icon
+                            size="big"
+                            name="github"
+                        />
+                        View Issue
                     </a>
-                    
+
                 </div>
                 <div className="row">
                     <Form onSubmit={this.onSubmit}>

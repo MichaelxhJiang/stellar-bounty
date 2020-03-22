@@ -58,51 +58,94 @@ class MainList extends Component {
                 _id: "1",
                 title: "Open Issue - I'll pay anything",
                 bounty: true,
+                open: true,
+                github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+            },
+            {
+                _id: "1",
+                title: "Issue with completing transactions - Bounty Available",
+                bounty: true,
+                open: false,
                 github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             },
             {
                 _id: "2",
                 title: "Please fix!",
                 bounty: false,
+                open: true,
                 github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
-            }   
+            }
         ]
 
         this.setState({
             issues: data.map(item => {
-                return ( 
-                    <Card key={item._id} fluid>
+                return (
+                    <Card key={item._id} color={item.bounty && !item.open ? "red" : item.bounty && item.open ? "green" : null} fluid>
                         <Card.Content>
-                            <Card.Header textAlign="left">
-                                <div style={{ wordWrap: "break-word" }}>
-                                    <Menu.Item
-                                        href={item.github_url}
-                                        target="_blank"
-                                    >
-                                        <Icon 
-                                            name= "github" 
-                                            color="black" 
-                                        />
-                                    </Menu.Item>
-                                    {item.title}
-                                </div>
-                            </Card.Header>
+                            {item.bounty && !item.open ?
+                                <Card.Header textAlign="left">
+                                    <div style={{ wordWrap: "break-word" }}>
+                                        <Menu.Item
+                                            href={item.github_url}
+                                            target="_blank"
+                                        >
+                                            <Icon
+                                                name="github"
+                                                color="black"
+                                            />
+                                        </Menu.Item>
+                                        <Link to={"/reward-solution/" + encodeURIComponent(item.github_url)} style={{ color: "black"}}>
+                                            {item.title}
+                                        </Link>
+                                    </div>
+                                </Card.Header> :
+                                <Card.Header textAlign="left">
+                                    <div style={{ wordWrap: "break-word" }}>
+                                        <Menu.Item
+                                            href={item.github_url}
+                                            target="_blank"
+                                        >
+                                            <Icon
+                                                name="github"
+                                                color="black"
+                                            />
+                                        </Menu.Item>
+                                        {item.title}
+                                    </div>
+                                </Card.Header>
+                            }
 
-                            {item.bounty ?
+                            {item.bounty && item.open ?
                                 <Card.Meta textAlign="right">
                                     <Icon
                                         name="exclamation circle"
                                         color="green"
                                     />
                                     <span style={{ paddingRight: 10 }}>Open Bounty</span>
-                                </Card.Meta> : 
+                                </Card.Meta> : null
+                            }
+                            {item.bounty && !item.open ?
+                                <Card.Description>
+                                    This issue is closed. Please select a solution to reward.
+                                </Card.Description> : null
+                            }
+                            {item.bounty && !item.open ?
                                 <Card.Meta textAlign="right">
-                                <Icon
-                                    name="edit"
-                                    color="grey"
-                                />
-                                <Link to={"/create-bounty/" + encodeURIComponent(item.github_url)}>Create a Bounty</Link>
-                            </Card.Meta>
+                                    <Icon
+                                        name="exclamation circle"
+                                        color="red"
+                                    />
+                                    <span style={{ paddingRight: 10 }}>Closed Issue</span>
+                                </Card.Meta> : null
+                            }
+                            {!item.bounty ?
+                                <Card.Meta textAlign="right">
+                                    <Icon
+                                        name="edit"
+                                        color="grey"
+                                    />
+                                    <Link to={"/create-bounty/" + encodeURIComponent(item.github_url)}>Create a Bounty</Link>
+                                </Card.Meta> : null
                             }
                         </Card.Content>
                     </Card>
@@ -113,8 +156,8 @@ class MainList extends Component {
 
     render() {
         return (
-            <div style={{padding: '40px'}}>
-                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'0px 0px 40px 0px'}}>
+            <div style={{ padding: '40px' }}>
+                <div className="row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0px 0px 40px 0px' }}>
                     <Header className="header" as="h2">
                         Open Issues
                     </Header>

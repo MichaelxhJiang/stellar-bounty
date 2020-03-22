@@ -7,7 +7,7 @@ import MainList from "./Main-List";
 import CreateBountyForm from "./Create-Bounty-Form"
 import SolutionList from "./Solution-List"
 import RewardSolutionForm from "./Reward-Solution-Form";
-
+import ClaimBountyForm from "./Claim-Bounty-Form";
 
 
 function App() {
@@ -34,13 +34,16 @@ function App() {
           <Route exact path="/solutions" component={CreateBountyForm}>
             <SolutionList />
           </Route>
+          <Route path="/claim-bounty/:githubUrl" component={ClaimBountyForm}>
+            <ClaimBountyForm />
+          </Route>
           <Route path="/create-bounty/:githubUrl" component={CreateBountyForm}>
             <CreateBountyForm />
           </Route>
-          <Route path="/reward-solution/:githubUrl" component={CreateBountyForm}>
+          <Route path="/reward-solution/:githubUrl" component={RewardSolutionForm}>
             <RewardSolutionForm />
           </Route>
-          <Route exact path="/">
+          <Route exact path="/" component={MainList}>
             <MainList />
           </Route>
         </Switch>

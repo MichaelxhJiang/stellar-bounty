@@ -81,10 +81,20 @@ class CreateBountyForm extends Component {
         */
         return (
             <div style={{padding: '40px'}}>
-                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'40px'}}>
+                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'0px 0px 20px 0px'}}>
                     <Header className="header" as="h2">
                         Create a Bounty
                     </Header>
+                </div>
+                <div style={{display: 'flex', justifyContent:'center', alignItems:'center', padding: '0px 0px 20px 0px'}}>
+                    <a href={this.state.githubUrl} target="_blank" style={{color: "grey"}}>
+                    <Icon
+                        size="big"
+                        name="github"
+                    />
+                    View Issue
+                    </a>
+                    
                 </div>
                 <div className="row">
                     <Form onSubmit={this.onSubmit}>

@@ -77,6 +77,7 @@ class MainList extends Component {
                                 <div style={{ wordWrap: "break-word" }}>
                                     <Menu.Item
                                         href={item.github_url}
+                                        target="_blank"
                                     >
                                         <Icon 
                                             name= "github" 
@@ -112,8 +113,8 @@ class MainList extends Component {
 
     render() {
         return (
-            <div style={{padding: '50px'}}>
-                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'40px'}}>
+            <div style={{padding: '40px'}}>
+                <div className="row" style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:'0px 0px 40px 0px'}}>
                     <Header className="header" as="h2">
                         Open Issues
                     </Header>

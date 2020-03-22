@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 // import the Container Component from the semantic-ui-react
-import { Container, Menu } from "semantic-ui-react";
+import { Container, Menu, Button } from "semantic-ui-react";
 // import the ToDoList component
 import MainList from "./Main-List";
 import CreateBountyForm from "./Create-Bounty-Form"
@@ -19,6 +19,13 @@ function App() {
           <Menu.Item>
             <Link to="/solutions">Solutions</Link>
           </Menu.Item>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Button class="ui primary button">
+                Sign in with Github
+              </Button>
+            </Menu.Item>
+          </Menu.Menu>
         </Menu>
 
         <Switch>

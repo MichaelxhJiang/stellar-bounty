@@ -1,12 +1,14 @@
 import React from "react";
 import "./App.css";
-// import the Container Component from the semantic-ui-react
 import { Container, Menu, Button } from "semantic-ui-react";
-// import the ToDoList component
+import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
+
 import MainList from "./Main-List";
 import CreateBountyForm from "./Create-Bounty-Form"
 import SolutionList from "./Solution-List"
-import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
+import RewardSolutionForm from "./Reward-Solution-Form";
+
+
 
 function App() {
   return (
@@ -14,10 +16,10 @@ function App() {
       <Router>
         <Menu>
           <Menu.Item>
-            <Link to="/">Open Issues</Link>
+            <Link to="/" style={{ color: "black"}}>Open Issues</Link>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/solutions">Solutions</Link>
+            <Link to="/solutions" style={{ color: "black"}}>Solutions</Link>
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item>
@@ -34,6 +36,9 @@ function App() {
           </Route>
           <Route path="/create-bounty/:githubUrl" component={CreateBountyForm}>
             <CreateBountyForm />
+          </Route>
+          <Route path="/reward-solution/:githubUrl" component={CreateBountyForm}>
+            <RewardSolutionForm />
           </Route>
           <Route exact path="/">
             <MainList />

@@ -70,28 +70,41 @@ class MainList extends Component {
                 pullRequestTitle: "Fix stale code",
                 issueTitle: "Open Issue - I'll pay anything",
                 reward: true,
-                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/pull/2"
+                pullRequestUrl: "https://github.com/MichaelxhJiang/stellar-bounty/pull/2",
+                issueUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1",
+                claimed: false
             },
             {
                 _id: "2",
                 pullRequestTitle: "Temporary Fix for Issue",
                 issueTitle: "Please fix!",
                 reward: false,
-                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/pull/2"
-            }
+                pullRequestUrl: "https://github.com/MichaelxhJiang/stellar-bounty/pull/2",
+                issuerUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1",
+                claimed: false
+            },
+            {
+                _id: "3",
+                pullRequestTitle: "Hotfix #1",
+                issueTitle: "Urgent Bug (FIXED)",
+                reward: true,
+                pullRequestUrl: "https://github.com/MichaelxhJiang/stellar-bounty/pull/2",
+                issueUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1",
+                claimed: true
+            },
         ]
 
         this.setState({
             solutions: data.map(item => {
-                let { amount, asset } = this.getBounty(item.githubUrl)
+                let { amount, asset } = this.getBounty(item.issueUrl)
                 return (
-                    <Card key={item._id} color={item.reward ? "green" : null} fluid>
+                    <Card key={item._id} color={item.reward && !item.claimed ? "green" : item.reward && item.claimed ? "red" : null} fluid>
                         <Card.Content>
-                            {item.reward ?
+                            {item.reward && !item.claimed ?
                                 <Card.Header textAlign="left">
                                     <div style={{ wordWrap: "break-word" }}>
                                         <Menu.Item
-                                            href={item.githubUrl}
+                                            href={item.pullRequestUrl}
                                             target="_blank"
                                         >
                                             <Icon
@@ -100,7 +113,7 @@ class MainList extends Component {
                                             />
 
                                         </Menu.Item>
-                                        <Link to={"/claim-bounty/" + encodeURIComponent(item.githubUrl)} style={{ color: "black" }}>
+                                        <Link to={"/claim-bounty/" + encodeURIComponent(item.issueUrl)} style={{ color: "black" }}>
                                             {item.pullRequestTitle}
                                         </Link>
                                     </div>
@@ -109,7 +122,7 @@ class MainList extends Component {
                                 <Card.Header textAlign="left">
                                     <div style={{ wordWrap: "break-word" }}>
                                         <Menu.Item
-                                            href={item.githubUrl}
+                                            href={item.pullRequestUrl}
                                             target="_blank"
                                         >
                                             <Icon
@@ -123,16 +136,22 @@ class MainList extends Component {
 
                             }
 
-                            <Card.Description>
-                                Addresses: {item.issueTitle}
+                            <Card.Description style={{ display: "flex", flexDirection: "row" }}>
+                                Fixes:
+                                <a href={item.issueUrl} target="_blank">
+                                    <Header as="h4" style={{ padding: "0px 0px 0px 5px" }} >
+                                        {item.issueTitle}
+                                    </Header>
+                                </a>
                             </Card.Description>
+
                             <Card.Description>
                                 Bounty: {amount} {asset}
                             </Card.Description>
 
-                            {item.reward ?
+                            {item.reward && !item.claimed ?
                                 <Card.Description style={{ padding: "5px 0px 0px 0px" }}>
-                                    <Link to={"/claim-bounty/" + encodeURIComponent(item.githubUrl)}>
+                                    <Link to={"/claim-bounty/" + encodeURIComponent(item.issueUrl)}>
                                         <Header as="h4">
                                             Congrats, you were rewarded! Click to claim bounty.
                                     </Header>
@@ -140,13 +159,31 @@ class MainList extends Component {
                                 </Card.Description> : null
                             }
 
-                            {item.reward ?
+                            {item.reward && item.claimed ?
+                                <Card.Description style={{ padding: "5px 0px 0px 0px" }}>
+                                    <Header as="h4">
+                                        You already claimed this bounty.
+                                    </Header>
+                                </Card.Description> : null
+                            }
+
+                            {item.reward && !item.claimed ?
                                 <Card.Meta textAlign="right">
                                     <Icon
                                         name="exclamation circle"
                                         color="green"
                                     />
-                                    <Link to={"/claim-bounty/" + encodeURIComponent(item.githubUrl)}>Claim Bounty</Link>
+                                    <Link to={"/claim-bounty/" + encodeURIComponent(item.issueUrl)}>Claim Bounty</Link>
+                                </Card.Meta> : null
+                            }
+
+                            {item.reward && item.claimed ?
+                                <Card.Meta textAlign="right">
+                                    <Icon
+                                        name="exclamation circle"
+                                        color="red"
+                                    />
+                                    Bounty Claimed
                                 </Card.Meta> : null
                             }
                         </Card.Content>

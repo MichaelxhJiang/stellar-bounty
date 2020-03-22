@@ -106,9 +106,9 @@ class RewardSolutionForm extends Component {
         console.log("Issue Url::" + githubUrl)
 
         if (solution && githubUrl) {
-            console.log("Creating a bounty")
+            console.log("Selected solution to reward")
             axios.post(
-                endpoint + "bounty/create",
+                endpoint + "bounty/reward",
                 {
                     "issueUrl": githubUrl,
                     "pullRequestUrl": solution
@@ -150,7 +150,7 @@ class RewardSolutionForm extends Component {
                                     {item.pullRequestTitle}
                                 </Card.Header>
                                 <Card.Description>
-                                    {item.solver}
+                                    Author: {item.solver}
                                 </Card.Description>
 
                                 {item.merged ?
@@ -178,11 +178,6 @@ class RewardSolutionForm extends Component {
     }
 
     render() {
-        /*
-        Fields:
-         - Amount
-         - Asset
-        */
         return (
             <div style={{ padding: '40px' }}>
                 <div className="row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0px 0px 20px 0px' }}>

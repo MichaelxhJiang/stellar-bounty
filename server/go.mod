@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/google/go-github v17.0.0+incompatible
+	github.com/google/uuid v1.1.1
 	github.com/lib/pq v1.3.0
 	github.com/stellar/go v0.0.0-20200320201948-bab6abc8fbf3
 	go.uber.org/zap v1.14.1

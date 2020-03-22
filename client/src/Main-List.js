@@ -59,21 +59,21 @@ class MainList extends Component {
                 title: "Open Issue - I'll pay anything",
                 bounty: true,
                 open: true,
-                github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             },
             {
                 _id: "1",
                 title: "Issue with completing transactions - Bounty Available",
                 bounty: true,
                 open: false,
-                github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             },
             {
                 _id: "2",
                 title: "Please fix!",
                 bounty: false,
                 open: true,
-                github_url: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             }
         ]
 
@@ -86,7 +86,7 @@ class MainList extends Component {
                                 <Card.Header textAlign="left">
                                     <div style={{ wordWrap: "break-word" }}>
                                         <Menu.Item
-                                            href={item.github_url}
+                                            href={item.githubUrl}
                                             target="_blank"
                                         >
                                             <Icon
@@ -94,7 +94,7 @@ class MainList extends Component {
                                                 color="black"
                                             />
                                         </Menu.Item>
-                                        <Link to={"/reward-solution/" + encodeURIComponent(item.github_url)} style={{ color: "black"}}>
+                                        <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black"}}>
                                             {item.title}
                                         </Link>
                                     </div>
@@ -102,7 +102,7 @@ class MainList extends Component {
                                 <Card.Header textAlign="left">
                                     <div style={{ wordWrap: "break-word" }}>
                                         <Menu.Item
-                                            href={item.github_url}
+                                            href={item.githubUrl}
                                             target="_blank"
                                         >
                                             <Icon
@@ -144,7 +144,7 @@ class MainList extends Component {
                                         name="edit"
                                         color="grey"
                                     />
-                                    <Link to={"/create-bounty/" + encodeURIComponent(item.github_url)}>Create a Bounty</Link>
+                                    <Link to={"/create-bounty/" + encodeURIComponent(item.githubUrl)}>Create a Bounty</Link>
                                 </Card.Meta> : null
                             }
                         </Card.Content>

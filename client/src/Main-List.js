@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Card, Header, Form, Input, Icon, Menu } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 let endpoint = "http://localhost:8080";
 
@@ -9,8 +10,7 @@ class MainList extends Component {
         super(props);
 
         this.state = {
-            task: "",
-            items: []
+            issues: []
         };
     }
 
@@ -94,7 +94,14 @@ class MainList extends Component {
                                         color="green"
                                     />
                                     <span style={{ paddingRight: 10 }}>Open Bounty</span>
-                                </Card.Meta> : null
+                                </Card.Meta> : 
+                                <Card.Meta textAlign="right">
+                                <Icon
+                                    name="edit"
+                                    color="grey"
+                                />
+                                <Link to={"/create-bounty/" + encodeURIComponent(item.github_url)}>Create a Bounty</Link>
+                            </Card.Meta>
                             }
                         </Card.Content>
                     </Card>

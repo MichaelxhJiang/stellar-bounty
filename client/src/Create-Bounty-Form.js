@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
+import { withRouter } from "react-router-dom"
 
 let endpoint = "http://localhost:8080";
 
@@ -19,11 +20,22 @@ class CreateBountyForm extends Component {
         };
     }
 
+    componentDidMount() {
+        const { githubUrl } = this.props.match.params
+        let decodedUrl = decodeURIComponent(githubUrl)
+        console.log(decodedUrl)
+
+        this.setState({
+            "githubUrl": decodedUrl
+        })
+    }
+
     onSubmit = () => {
-        let { asset, amount } = this.state;
+        let { asset, amount, githubUrl } = this.state;
 
         console.log("asset::" + asset)
         console.log("amount::" + amount)
+        console.log("github url::" + githubUrl)
 
         if (isNaN(amount)) {
             console.error("Amount is not a number")
@@ -93,4 +105,4 @@ class CreateBountyForm extends Component {
     }
 }
 
-export default CreateBountyForm;
+export default withRouter(CreateBountyForm);

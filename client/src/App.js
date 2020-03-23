@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Container, Menu, Button } from "semantic-ui-react";
+import { Container, Menu, Button, Header } from "semantic-ui-react";
 import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
 
 import MainList from "./Main-List";
@@ -15,11 +15,16 @@ function App() {
     <Container>
       <Router>
         <Menu>
-          <Menu.Item>
-            <Link to="/" style={{ color: "black"}}>My Issues</Link>
+          <Menu.Item style={{backgroundColor: "#222"}}>
+            <Header as="h1" style={{color:"white"}}>
+              Stellar Hunter
+            </Header>
           </Menu.Item>
           <Menu.Item>
-            <Link to="/solutions" style={{ color: "black"}}> My Solutions</Link>
+            <Link to="/" style={{ color: "black" }}>My Issues</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/solutions" style={{ color: "black" }}> My Solutions</Link>
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item>

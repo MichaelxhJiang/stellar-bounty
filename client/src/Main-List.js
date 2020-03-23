@@ -66,34 +66,53 @@ class MainList extends Component {
         var data = [
             {
                 _id: "1",
-                title: "Open Issue - I'll pay anything",
+                title: "Open Issue - I'll pay anything :P",
                 bounty: true,
                 open: true,
-                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
-            },
-            {
-                _id: "1",
-                title: "Issue with completing transactions",
-                bounty: true,
-                open: false,
+                rewarded: false,
                 githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             },
             {
                 _id: "2",
+                title: "Issue with completing transactions",
+                bounty: true,
+                open: false,
+                rewarded: false,
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+            },
+            {
+                _id: "3",
                 title: "Please fix!",
                 bounty: false,
                 open: true,
+                rewarded: false,
                 githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
-            }
+            },
+            {
+                _id: "4",
+                title: "Help! Too many bounties to hunt!",
+                bounty: false,
+                open: true,
+                rewarded: false,
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+            },
+            {
+                _id: "5",
+                title: "Fatal Error in backend",
+                bounty: true,
+                open: false,
+                rewarded: true,
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+            },
         ]
 
         this.setState({
             issues: data.map(item => {
                 let { amount, asset } = this.getBounty(item.githubUrl)
                 return (
-                    <Card key={item._id} color={item.bounty && !item.open ? "red" : item.bounty && item.open ? "green" : null} fluid>
+                    <Card key={item._id} color={item.rewarded ? "grey" : item.bounty && !item.open ? "red" : item.bounty && item.open ? "green" : null} fluid>
                         <Card.Content>
-                            {item.bounty && !item.open ?
+                            {item.bounty && !item.open && !item.rewarded ?
                                 <Card.Header textAlign="left">
                                     <div style={{ wordWrap: "break-word" }}>
                                         <Menu.Item
@@ -130,7 +149,7 @@ class MainList extends Component {
                                     Bounty: {amount} {asset}
                                 </Card.Description> : null
                             }
-                            {item.bounty && !item.open ?
+                            {item.bounty && !item.open && !item.rewarded ?
                                 <Card.Description style={{padding: "5px 0px 0px 0px"}}>
                                     <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black" }}>
                                         <Header as="h4">
@@ -139,7 +158,16 @@ class MainList extends Component {
                                     </Link>
                                 </Card.Description> : null
                             }
-                            {item.bounty && item.open ?
+                            {item.bounty && !item.open && item.rewarded ?
+                                <Card.Description style={{padding: "5px 0px 0px 0px"}}>
+                                    <Link to={"/reward-solution/" + encodeURIComponent(item.githubUrl)} style={{ color: "black" }}>
+                                        <Header as="h4">
+                                            Solution has already been rewarded.
+                                        </Header>
+                                    </Link>
+                                </Card.Description> : null
+                            }
+                            {item.bounty && item.open && !item.rewarded ?
                                 <Card.Meta textAlign="right">
                                     <Icon
                                         name="exclamation circle"
@@ -148,13 +176,22 @@ class MainList extends Component {
                                     <span style={{ paddingRight: 10 }}>Open Bounty</span>
                                 </Card.Meta> : null
                             }
-                            {item.bounty && !item.open ?
+                            {item.bounty && !item.open && !item.rewarded ?
                                 <Card.Meta textAlign="right">
                                     <Icon
                                         name="exclamation circle"
                                         color="red"
                                     />
                                     <span style={{ paddingRight: 10 }}>Closed Issue</span>
+                                </Card.Meta> : null
+                            }
+                            {item.bounty && !item.open && item.rewarded ?
+                                <Card.Meta textAlign="right">
+                                    <Icon
+                                        name="exclamation circle"
+                                        color="grey"
+                                    />
+                                    <span style={{ paddingRight: 10 }}>Bounty Rewarded</span>
                                 </Card.Meta> : null
                             }
                             {!item.bounty ?

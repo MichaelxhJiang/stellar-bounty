@@ -53,7 +53,8 @@ class CreateBountyForm extends Component {
                 endpoint + "bounty/create",
                 {
                     "amount": amount,
-                    "asset": asset
+                    "asset": asset,
+                    "githubUrl": githubUrl
                 },
                 {
                     headers: {

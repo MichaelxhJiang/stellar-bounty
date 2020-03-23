@@ -98,7 +98,7 @@ class MainList extends Component {
             solutions: data.map(item => {
                 let { amount, asset } = this.getBounty(item.issueUrl)
                 return (
-                    <Card key={item._id} color={item.reward && !item.claimed ? "green" : item.reward && item.claimed ? "red" : null} fluid>
+                    <Card key={item._id} color={item.reward && !item.claimed ? "green" : item.reward && item.claimed ? "grey" : null} fluid>
                         <Card.Content>
                             {item.reward && !item.claimed ?
                                 <Card.Header textAlign="left">
@@ -181,7 +181,7 @@ class MainList extends Component {
                                 <Card.Meta textAlign="right">
                                     <Icon
                                         name="exclamation circle"
-                                        color="red"
+                                        color="grey"
                                     />
                                     Bounty Claimed
                                 </Card.Meta> : null

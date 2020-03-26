@@ -166,6 +166,7 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	ctx := r.Context()
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	session, err := s.sessionStore.Get(r, "sh_session")
 	if err != nil {
@@ -181,7 +182,6 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 		State:     "all",
 		Sort:      "updated",
 		Direction: "desc",
-		//Since: time.Date(2018, 1, 2, 15, 04, 05, 0, time.UTC),
 	}
 
 	var issues []*model.Issue
@@ -216,7 +216,6 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(payload)
 }

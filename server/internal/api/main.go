@@ -54,7 +54,7 @@ func NewServer(
 	http.HandleFunc("/auth/github", srv.handleGithubAuth)
 	http.HandleFunc("/auth/github/callback", srv.handleGithubAuthCallback)
 
-	http.HandleFunc("/issues", srv.handleGetOpenIssues)
+	http.HandleFunc("/api/issues", srv.handleGetOpenIssues)
 
 	return srv
 }
@@ -74,15 +74,15 @@ func (s *Server) handleGithubAuth(w http.ResponseWriter, r *http.Request) {
 		// default to redirecting to the home page
 		redirect = "/"
 	}
-	redirectURL, err := url.Parse(redirect)
+	_, err = url.Parse(redirect)
 	if err != nil {
 		err = fmt.Errorf("redirect should be a valid url: %s", redirect)
 		return
 	}
-	if redirectURL.Scheme != "" || redirectURL.Host != "" {
-		err = fmt.Errorf("redirect should be local url: %s", redirect)
-		return
-	}
+	//if redirectURL.Scheme != "" || redirectURL.Host != "" {
+	//	err = fmt.Errorf("redirect should be local url: %s", redirect)
+	//	return
+	//}
 
 	state := uuid.New()
 	s.oauthState[state] = redirect
@@ -178,14 +178,16 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 
 	opts := &github.IssueListOptions{
 		Filter:    "subscribed",
-		State:     "open",
+		State:     "all",
 		Sort:      "updated",
 		Direction: "desc",
+		//Since: time.Date(2018, 1, 2, 15, 04, 05, 0, time.UTC),
 	}
 
 	var issues []*model.Issue
 	for {
-		issuePage, resp, err := client.Issues.List(ctx, true, opts)
+		issuePage, resp, err := client.Issues.List(ctx, false, opts)
+		//fmt.Println(issuePage)
 		if err != nil {
 			return
 		}
@@ -195,10 +197,10 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			issues = append(issues, &model.Issue{
-				ID:             int(*issue.ID),
-				Title:          *issue.Title,
-				URL:            *issue.URL,
-				IsOpen:         *issue.State == "open",
+				ID:             int(issue.GetID()),
+				Title:          issue.GetTitle(),
+				URL:            issue.GetHTMLURL(),
+				IsOpen:         issue.GetState() == "open",
 				ExistsBounty:   false,
 				BountyRewarded: false,
 			})
@@ -214,6 +216,7 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Add("Content-Type", "application/json")
 	_, err = w.Write(payload)
 }
 

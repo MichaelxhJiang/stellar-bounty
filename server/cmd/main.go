@@ -5,14 +5,11 @@ import (
 	"os"
 
 	"github.com/MichaelxhJiang/stellar-bounty/server/internal/api"
-	"golang.org/x/oauth2/github"
-
 	"github.com/MichaelxhJiang/stellar-bounty/server/internal/database"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
 )
 
 func main() {
@@ -28,6 +25,7 @@ func main() {
 		ClientSecret: clientSecret,
 		Endpoint:     github.Endpoint,
 		RedirectURL:  "http://localhost:8080/auth/github/callback",
+		Scopes:       []string{"public_repo"},
 	}
 
 	// logging

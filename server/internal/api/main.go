@@ -1,9 +1,15 @@
 package api
 
 import (
+	"context"
+	"encoding/gob"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/MichaelxhJiang/stellar-bounty/server/internal/model"
 
 	"github.com/MichaelxhJiang/stellar-bounty/server/internal/database"
 	"github.com/google/go-github/github"
@@ -12,6 +18,10 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 )
+
+func init() {
+	gob.Register(&oauth2.Token{})
+}
 
 type Server struct {
 	*http.Server
@@ -43,6 +53,8 @@ func NewServer(
 
 	http.HandleFunc("/auth/github", srv.handleGithubAuth)
 	http.HandleFunc("/auth/github/callback", srv.handleGithubAuthCallback)
+
+	http.HandleFunc("/issues", srv.handleGetOpenIssues)
 
 	return srv
 }
@@ -131,12 +143,84 @@ func (s *Server) handleGithubAuthCallback(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	session, err := s.sessionStore.Get(r, "auth")
+	session, err := s.sessionStore.Get(r, "sh_session")
 	if err != nil {
 		return
 	}
 	session.Values["id"] = userID
-	session.Save(r, w)
+	session.Values["token"] = token
+	err = session.Save(r, w)
+	if err != nil {
+		return
+	}
 
 	http.Redirect(w, r, redirect, http.StatusFound)
+}
+
+func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
+	var err error
+	defer func() {
+		if err != nil {
+			s.log.Error(err)
+			http.Error(w, "error getting issues", http.StatusInternalServerError)
+		}
+	}()
+	ctx := r.Context()
+
+	session, err := s.sessionStore.Get(r, "sh_session")
+	if err != nil {
+		return
+	}
+	client, err := s.getClientFromSession(session)
+	if err != nil {
+		return
+	}
+
+	opts := &github.IssueListOptions{
+		Filter:    "subscribed",
+		State:     "open",
+		Sort:      "updated",
+		Direction: "desc",
+	}
+
+	var issues []*model.Issue
+	for {
+		issuePage, resp, err := client.Issues.List(ctx, true, opts)
+		if err != nil {
+			return
+		}
+		for _, issue := range issuePage {
+			if issue.IsPullRequest() {
+				// only looking for issues, skip PRs
+				continue
+			}
+			issues = append(issues, &model.Issue{
+				ID:             int(*issue.ID),
+				Title:          *issue.Title,
+				URL:            *issue.URL,
+				IsOpen:         *issue.State == "open",
+				ExistsBounty:   false,
+				BountyRewarded: false,
+			})
+		}
+		if resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	payload, err := json.Marshal(issues)
+	if err != nil {
+		return
+	}
+
+	_, err = w.Write(payload)
+}
+
+func (s *Server) getClientFromSession(session *sessions.Session) (*github.Client, error) {
+	if token, ok := session.Values["token"].(*oauth2.Token); ok {
+		client := s.oauthConfig.Client(context.Background(), token)
+		return github.NewClient(client), nil
+	}
+	return nil, errors.New("no token found in session")
 }

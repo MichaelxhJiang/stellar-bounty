@@ -216,7 +216,8 @@ func (s *Server) handleGetOpenIssues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(payload)
 }
 

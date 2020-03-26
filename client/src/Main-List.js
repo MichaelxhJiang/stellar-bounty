@@ -66,24 +66,16 @@ class MainList extends Component {
         var data = [
             {
                 _id: "1",
-                title: "Open Issue - I'll pay anything :P",
+                title: "Update the README with how to get started",
                 bounty: true,
-                open: true,
+                open: false,
                 rewarded: false,
-                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-hunter/issues/3"
             },
             {
                 _id: "2",
                 title: "Issue with completing transactions",
                 bounty: true,
-                open: false,
-                rewarded: false,
-                githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
-            },
-            {
-                _id: "3",
-                title: "Please fix!",
-                bounty: false,
                 open: true,
                 rewarded: false,
                 githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
@@ -94,8 +86,17 @@ class MainList extends Component {
                 bounty: false,
                 open: true,
                 rewarded: false,
+                githubUrl: "https://github.com/MichaelxhJiang/stellar-hunter/issues/5"
+            },
+            {
+                _id: "3",
+                title: "Please fix!",
+                bounty: false,
+                open: true,
+                rewarded: false,
                 githubUrl: "https://github.com/MichaelxhJiang/stellar-bounty/issues/1"
             },
+            
             {
                 _id: "5",
                 title: "Fatal Error in backend",

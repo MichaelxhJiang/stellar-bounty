@@ -65,13 +65,13 @@ class RewardSolutionForm extends Component {
 
         let data = [
             {
-                "pullRequestTitle": "Pull Request 1",
-                "githubUrl": "https://github.com/MichaelxhJiang/stellar-bounty/pull/2",
+                "pullRequestTitle": "updated readme",
+                "githubUrl": "https://github.com/MichaelxhJiang/stellar-hunter/pull/4",
                 "solver": "MichaelxhJiang",
                 "merged": true
             },
             {
-                "pullRequestTitle": "Pull Request 2",
+                "pullRequestTitle": "Attempted Fix",
                 "githubUrl": "https://github.com/MichaelxhJiang/stellar-bounty/pull/3",
                 "solver": "MichaelxhJiang",
                 "merged": false
@@ -177,6 +177,11 @@ class RewardSolutionForm extends Component {
         }
     }
 
+    handleClick() {
+        // do something meaningful, Promises, if/else, whatever, and then
+        window.location.assign('web+stellar:pay?destination=GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS&amount=100&memo=');
+      }
+
     render() {
         return (
             <div style={{ padding: '40px' }}>
@@ -203,7 +208,9 @@ class RewardSolutionForm extends Component {
                     <Form onSubmit={this.onSubmit}>
                         {this.renderSolutions()}
                         <div style={{ padding: "20px 0px 0px 0px" }}></div>
-                        <Form.Button>Submit</Form.Button>
+                        <a href="web+stellar:pay?destination=GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS&amount=100&memo=">
+                            <Form.Button onClick={this.handleClick.bind(this)}>Submit</Form.Button>
+                        </a>
                     </Form>
                 </div>
             </div>

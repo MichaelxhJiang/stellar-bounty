@@ -74,6 +74,11 @@ class CreateBountyForm extends Component {
         this.setState({ "asset": value })
     }
 
+    handleClick() {
+        // do something meaningful, Promises, if/else, whatever, and then
+        window.location.assign('web+stellar:pay?destination=GDVFQQQOCPPQJZLFSABMPBAVKCHPE7KD7SN6CWBH4JEKPE4LVLYMNMYS&amount=100&memo=');
+      }
+
     render() {
         /*
         Fields:
@@ -108,7 +113,7 @@ class CreateBountyForm extends Component {
                             placeholder='Select Asset'
                             onChange={this.changeAsset}
                         />
-                        <Form.Button>Submit</Form.Button>
+                        <Form.Button  onClick={this.handleClick.bind(this)}>Submit</Form.Button>
                     </Form>
                 </div>
             </div>

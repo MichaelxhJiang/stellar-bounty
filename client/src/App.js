@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import "./App.css";
 import { Container, Menu, Button, Header } from "semantic-ui-react";
 import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
@@ -8,32 +9,15 @@ import CreateBountyForm from "./Create-Bounty-Form"
 import SolutionList from "./Solution-List"
 import RewardSolutionForm from "./Reward-Solution-Form";
 import ClaimBountyForm from "./Claim-Bounty-Form";
+import NavBar from './Nav-Bar'
 
+let endpoint = "http://localhost:8080";
 
 function App() {
   return (
     <Container>
       <Router>
-        <Menu>
-          <Menu.Item style={{backgroundColor: "#222"}}>
-            <Header as="h1" style={{color:"white"}}>
-              Stellar Hunter
-            </Header>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to="/" style={{ color: "black" }}>My Issues</Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to="/solutions" style={{ color: "black" }}> My Solutions</Link>
-          </Menu.Item>
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              <Button class="ui primary button">
-                Sign in with Github
-              </Button>
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+        <NavBar />
 
         <Switch>
           <Route exact path="/solutions" component={CreateBountyForm}>
